@@ -1,5 +1,5 @@
-from StringIO import StringIO
-import urllib
+from io import StringIO
+import urllib.request, urllib.parse, urllib.error
 from django.conf import settings
 from django.utils.unittest.case import TestCase
 
@@ -20,13 +20,13 @@ def dummyUrlOpenWithProxyGrantingTikcet(url):
 
 class backendTest(TestCase):
     def test_verify_cas2_no_pgt(self):
-        urllib.urlopen = dummyUrlOpenNoProxyGrantingTicket
+        urllib.request.urlopen = dummyUrlOpenNoProxyGrantingTicket
         settings.CAS_PROXY_CALLBACK = None
         user, authentication_response = _verify_cas2('ST-jkadfhjksdhjkfh', 'http://dummy')
         self.assertEqual('sannies', user)
 
     def test_verify_cas2_with_pgt(self):
-        urllib.urlopen = dummyUrlOpenWithProxyGrantingTikcet
+        urllib.request.urlopen = dummyUrlOpenWithProxyGrantingTikcet
         #st = ServiceTicket.objects.create();
         tgt = Tgt.objects.create(username='sannies');
         PgtIOU.objects.create(tgt=tgt, pgtIou='PGTIOU-NUYny6RiAfHBsuWq270m3l1kgPTjEOCexpowQV9ZJDrh8cGKzb')

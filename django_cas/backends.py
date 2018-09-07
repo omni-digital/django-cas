@@ -1,7 +1,7 @@
 """CAS authentication backend"""
 
-import urllib
-from urlparse import urljoin
+import urllib.request, urllib.parse, urllib.error
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -49,9 +49,9 @@ def _verify_cas2(ticket, service):
         params = {'ticket': ticket, 'service': service}
 
     url = (urljoin(settings.CAS_SERVER_URL, 'proxyValidate') + '?' +
-           urllib.urlencode(params))
+           urllib.parse.urlencode(params))
 
-    page = urllib.urlopen(url)
+    page = urllib.request.urlopen(url)
     response = page.read()
     tree = ElementTree.fromstring(response)
     page.close()
